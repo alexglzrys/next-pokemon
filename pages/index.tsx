@@ -1,10 +1,10 @@
 import { Layout } from "@/components/layouts";
 import { Inter } from "next/font/google";
-import { GetStaticProps, NextPage } from "next";
+import { GetStaticProps } from "next";
 import { pokemonApi } from "@/api";
 import { PokemonListResponse, SmallPokemon } from "../interfaces";
-import Image from "next/image";
-import { Card, Grid, Row, Text } from "@nextui-org/react";
+import { Grid } from "@nextui-org/react";
+import { PokemonCard } from "@/components/pokemon";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,19 +16,9 @@ export default function HomePage({ pokemons }: Props) {
   return (
     <Layout title="Listado de Pokemons">
       <Grid.Container gap={2} justify="flex-start">
-        {pokemons.map(({id, name, img}) => (
-          <Grid key={id} xs={6} sm={3} md={2} lg={1}>
-            <Card isHoverable isPressable>
-              <Card.Body css={{p: 1}}>
-                <Card.Image src={img} width="100%" height={140}/>
-              </Card.Body>
-              <Card.Footer>
-                <Row justify="space-between">
-                  <Text transform="capitalize">{name}</Text>
-                  <Text>#{id}</Text>
-                </Row>
-              </Card.Footer>
-            </Card>
+        {pokemons.map((pokemon) => (
+          <Grid key={pokemon.id} xs={6} sm={3} md={2} lg={1}>
+            <PokemonCard pokemon={pokemon}/>
           </Grid>
         ))}
       </Grid.Container>
