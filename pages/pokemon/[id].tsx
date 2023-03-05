@@ -4,12 +4,20 @@ import { pokemonApi } from "@/api";
 import { Pokemon } from "@/interfaces";
 import { Button, Card, Container, Grid, Image, Text } from "@nextui-org/react";
 import { localFavorites } from "@/utils";
+import { useEffect, useState } from "react";
 
 interface Props {
   pokemon: Pokemon;
 }
 
 const PokemonPage: NextPage<Props> = ({ pokemon }) => {
+
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  useEffect(() => {
+    // Lanzar un efecto secundario para verificar si el pokemon actual está en la lista de favoritos
+    setIsFavorite(localFavorites.existInFavorites(pokemon.id));
+  }, [pokemon.id])
 
   // ! NextJS puede ejecutar el código en el server y en cliente, por tanto, algunas cosas no podrían estar presentes
   // * Por ejemplo localStorage solo está en el cliente, pero no en el server
@@ -18,6 +26,7 @@ const PokemonPage: NextPage<Props> = ({ pokemon }) => {
   const handleToggleFavorite = () => {
     // Guardar o eliminar de LocalStorage
     localFavorites.toggleFavorites(pokemon.id);
+    setIsFavorite(!isFavorite)
   }
 
   return (
@@ -44,8 +53,11 @@ const PokemonPage: NextPage<Props> = ({ pokemon }) => {
                 {pokemon.name}
               </Text>
               {/* NextUI obliga a usar onPress sobre el clasico onClick */}
-              <Button color="gradient" ghost onPress={handleToggleFavorite}>
-                Guardar en Favoritos
+              <Button 
+                color="gradient" 
+                ghost={!isFavorite} 
+                onPress={handleToggleFavorite}>
+                {isFavorite ? 'Eliminar de Favoritos' : 'Guardar en Favoritos'}
               </Button>
             </Card.Header>
             <Card.Body>
