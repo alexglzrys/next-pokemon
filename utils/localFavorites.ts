@@ -26,10 +26,15 @@ const existInFavorites = (id: number) => {
     let favorites: number[] = JSON.parse(localStorage.getItem('favorites') || '[]');
     // Verficar si el ID del pokemon se encuentra en Favoritos
     return favorites.includes(id);
-    
+}
+
+const pokemons = () => {
+    // Regresar todo el listado de pokemons favoritos
+    return JSON.parse(localStorage.getItem('favorites') || '[]');
 }
 
 export default {
     toggleFavorites,
-    existInFavorites
+    existInFavorites,
+    pokemons
 }
